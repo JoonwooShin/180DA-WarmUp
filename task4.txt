@@ -1,0 +1,7 @@
+1. Using a threshold of (0, 70, 50), (10, 255, 255), both the HSV and RGB had pretty equivalent performance in tracking my red ipad.
+
+2. The tracking of the ipad works well even in different lighting conditions due to the large threshold range of all red hues.
+
+3. Changing the brightness hurts the tracking of the color.
+
+4. WIP
