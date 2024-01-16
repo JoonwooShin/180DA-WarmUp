@@ -1,7 +1,7 @@
-1. Using a threshold of (0, 70, 50), (10, 255, 255), both the HSV and RGB had pretty equivalent performance in tracking my red ipad.
+1. Using a threshold of (0, 70, 50), (10, 255, 255), for the HSV, and (128, 0, 0), (255, 50, 50), for the RGB, the HSV had a significantly better performance in tracking my red ipad. The HSV was able to cleanly track the ipad, whereas the RGB made multiple bounding boxes. The results are shown in HSV.png and RGB.png. The code is shown in object_tracking.py.
 
-2. The tracking of the ipad works well even in different lighting conditions due to the large threshold range of all red hues.
+2. The tracking of the ipad works well in slightly dimmer conditions, however when there is insufficient lighting, the tracking ceases to work entirely. A depiction of this is shown in DARK.png. The code is shown in object_tracking.py.
 
-3. Changing the brightness hurts the tracking of the color.
+3. Turning the brightness up does not affect the tracking, due to a maximum saturation and value being set very high. When I lowered the max saturation and value, the tracking could be fine tuned to a specific lighting condition; however, when the brightness changed, the tracking would fail. Instead, using a reasonably sized threshold, turning up the phone brightness did not impact the tracking, although the tracking was very poor and unstable when the phone brightness was set to its lowest. This result is shown in PHONE_DAKR.png and PHONE_BRIGHT.png. The tracking was done with HSV rather than RGB, since RGB tracking is comparatively poor. The code is shown in object_tracking.py.
 
-4. WIP
+4. I created another python file called color_finder.py that shows the dominant color of the blue rectangle in the center, in the top left. The code was written by referencing the given tutorial code. The central rectangle size had to be reduced due to the time it takes to run KMeans in real time, without further optimizations. Changing the lighting conditions around an object changes the brightness of that color slightly. Changing the surrounding lighting of a phone does not, however, impact the color significantly. Thus, we can say that the changes in brightness of the phone is more robust. An image of the color tracker working is shown in COLOR.png.
