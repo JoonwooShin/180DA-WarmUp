@@ -1,0 +1,11 @@
+1. In twoway.png, there is a screenshot of 3 users sending numbers back and forth, and incrementing by 1 whenever they recieve a number. Multiple numbers are being sent, so there are duplicates, but this should not be of concern, and can be considered as the intended behavior for this example. We noticed that when multiple users are added, they both recieve a number, and send back a message for each recieved message, so numbers are sent multiple times. Aside from this, we also had to ensure that we were not listening to our own message, and incrementing that. MQTT allows us to communicate between two users easily over TCP, and could be used to send simple messages back and forth. However, since our project will be communicating directly with a node.js server, it's unlikely that we will use MQTT in our fully designed project.
+
+2. The speech_game.py file that I got from a public github repo at https://github.com/realpython/python-speech-recognition/blob/master/guessing_game.py works well enough to distinguish between most words without issue. When testing individual characters, it confuses the characters with similar sounding words such as "B" and "bee," but otherwise the speech interpreter poses no other problems. This is because the speech game specificially uses a library of words rather than characters, but modifying this should not be an issue. Testing phrases also works well, although some specific phrases may be interpreted as similar sounding words, depending on how theyre spoken. Lasltly this was tested in the lab room with many people talking, and still correctly picked up on the words, so the noise should not be of too much concern with respect to our ideal gameplay environment.
+
+a) The given speech program can distinguish between words, so we can allow for speech commands for our game pretty easily.
+
+b) We want our speech recognition to distinguish between a few words, for example "rock, paper, scissors," which works perfectly well with no error.
+
+c) We do not need a high level of speech accuracy, because one misinput out of many will not cause issues for our game.
+
+d) We are confident that this works well enough, and do not require other hardware at the moment.
