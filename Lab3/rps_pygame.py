@@ -1,11 +1,12 @@
 import sys
 import pygame
+import random
 
 # Configuration
 pygame.init()
 fps = 60
 fpsClock = pygame.time.Clock()
-width, height = 640, 480
+width, height = 1000, 600
 screen = pygame.display.set_mode((width, height))
 
 font = pygame.font.SysFont('Arial', 40)
@@ -40,7 +41,7 @@ class Button():
             self.buttonSurface.fill(self.fillColors['hover'])
             if pygame.mouse.get_pressed(num_buttons=3)[0]:
                 self.buttonSurface.fill(self.fillColors['pressed'])
-                if self.onePress:
+                if self.onePress: 
                     self.onclickFunction()
                 elif not self.alreadyPressed:
                     self.onclickFunction()
@@ -53,15 +54,60 @@ class Button():
         ])
         screen.blit(self.buttonSurface, self.buttonRect)
 
-def myFunction():
-    print('Button Pressed')
+class TextBox():
+    def __init__(self, x, y, width, height, textText='Text Box', onclickFunction=None, onePress=False):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.color = '#add8e6'
+        self.textSurface = pygame.Surface((self.width, self.height))
+        self.textRect = pygame.Rect(self.x, self.y, self.width, self.height)
 
-Button(30, 30, 400, 100, 'Rock', myFunction)
-Button(30, 140, 400, 100, 'Paper', myFunction, True)
-Button(30, 250, 400, 100, 'Scissors', myFunction, True)
+        self.textSurf = font.render(textText, True, (20, 20, 20))
+        objects.append(self)
+    def process(self):
+        self.textSurface.fill(self.color)
+        self.textSurface.blit(self.textSurf, [
+            self.textRect.width/2 - self.textSurf.get_rect().width/2,
+            self.textRect.height/2 - self.textSurf.get_rect().height/2
+        ])
+        screen.blit(self.textSurface, self.textRect)
+def cpu(user_input):
+    cpu = random.randint(1,3)
+    choices = ['Rock', 'Paper', 'Scissors']
+    cpu_choice = choices[cpu - 1]
+    result = 0
+    diff = user_input - cpu
+    if diff == 0:
+        result = 0
+    elif (diff % 3) == 1: 
+        result = 1
+    else:
+        result = 2
+    game_results = ['Tie Game!','You Win!','CPU Wins!']
+    text = 'CPU chose ' + cpu_choice + '. ' + game_results[result]
+    TextBox((width - 700)/2, 460, 700, b_height, text)
 
+def rockFunc():
+    res = cpu(1)
+
+def paperFunc():
+    res = cpu(2)
+
+def scissorsFunc():
+    res = cpu(3)
+
+
+b_width = 400
+b_height = 100
+b_init_h = 140
+Button((width - b_width)/2, b_init_h, b_width, b_height, 'Rock', rockFunc)
+Button((width - b_width)/2, b_init_h + b_height + 10, b_width, b_height, 'Paper', paperFunc)
+Button((width - b_width)/2, b_init_h + 2 * b_height + 20, b_width, b_height, 'Scissors', scissorsFunc  )
+TextBox((width - 700)/2, 30, 700, b_height, 'Choose Rock Paper or Scissors!')
 while True:
-    screen.fill((20, 20, 20))
+    screen.fill((173, 216, 230))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
