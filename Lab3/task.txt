@@ -1,0 +1,3 @@
+1. The screenshots can be found in Rock_Paper_Scissors.png and pygame.png. 
+2. I read up on making a GUI using electron. Electron essentially makes everything a web app, which may be useful for our project.
+3. For our project, we will have a simple frontend UI most likely made with simple JS + CSS, which will allow the user to connect to the game they want. The game will be a fully made game simulated on an emulator, so aside from creating the connection between the game and the controller, there shouldn't be intensive graphics that we need to make on our end.
