@@ -67,6 +67,10 @@ class TextBox():
         ])
         screen.blit(self.textSurface, self.textRect)
 
+# global variables
+msg = None
+usr_choice = None
+
 def on_connect(client, userdata, flags, rc):
     client.subscribe("ece180d/test/rps/1", qos=1)
 
@@ -77,8 +81,13 @@ def on_disconnect(client, userdata, rc):
         print('Expected Disconnect')
 
 def on_message(client, userdata, message):
+    global msg, usr_choice
     msg = message.payload.decode()
     print('message recieved: ' + str(msg))
+    if msg and usr_choice is not None:
+        display_results(usr_choice, msg)
+        msg = None
+        usr_choice = None
 
 #mqtt
 client = mqtt.Client(client_id="player2")
@@ -104,11 +113,11 @@ b_width = 400
 b_height = 100
 b_init_h = 140
 
-def display_results(user_input, msg):
+def display_results(user_input, msg_input):
     choices = ['Rock', 'Paper', 'Scissors']
-    other_choice = choices[msg - 1]
+    other_choice = choices[int(msg_input) - 1]
     result = 0
-    diff = user_input - msg
+    diff = user_input - int(msg_input)
     if diff == 0:
         result = 0
         game_record[0]+=1
@@ -119,20 +128,41 @@ def display_results(user_input, msg):
         result = 2
         game_record[2]+=1
 
-    game_results = ['Tie Game!','You Win!','CPU Wins!']
+    game_results = ['Tie Game!','You Win!','Player1 Wins!']
     text = 'Player 1 chose ' + other_choice + '. ' + game_results[result]
     TextBox((width - 700)/2, 460, 700, b_height, text)
     wl_record = 'W: ' + str(game_record[1]) + ' T: ' + str(game_record[0]) + ' L: ' + str(game_record[2])
     TextBox((width - 700)/2, 570, 700, b_height, wl_record)
     
 def rockFunc():
+    global usr_choice
+    global msg
+    usr_choice = 1
     client.publish("ece180d/test/rps/2", 1, qos=1)
+    if msg and usr_choice is not None:
+        display_results(usr_choice, msg)
+        msg = None
+        usr_choice = None
 
 def paperFunc():
+    global usr_choice
+    global msg
+    usr_choice = 2
     client.publish("ece180d/test/rps/2", 2, qos=1)
+    if msg and usr_choice is not None:
+        display_results(usr_choice, msg)
+        msg = None
+        usr_choice = None
 
 def scissorsFunc():
+    global usr_choice
+    global msg
+    usr_choice = 3
     client.publish("ece180d/test/rps/2", 3, qos=1)
+    if msg and usr_choice is not None:
+        display_results(usr_choice, msg)
+        msg = None
+        usr_choice = None
 
 Button((width - b_width)/2, b_init_h, b_width, b_height, 'Rock', rockFunc)
 Button((width - b_width)/2, b_init_h + b_height + 10, b_width, b_height, 'Paper', paperFunc)
