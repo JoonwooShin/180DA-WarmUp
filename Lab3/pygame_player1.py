@@ -4,36 +4,7 @@ import time
 import sys
 import pygame
 
-def on_connect(client, userdata, flags, rc):
-    client.subscribe("ece180d/test/rps/2", qos=1)
-
-def on_disconnect(client, userdata, rc):
-    if rc != 0:
-        print('Unexpected Disconnect')
-    else:
-        print('Expected Disconnect')
-
-def on_message(client, userdata, message):
-    msg = message.payload.decode()
-
-client = mqtt.Client(client_id="player1")
-client.on_connect = on_connect
-client.on_disconnect = on_disconnect
-client.on_message = on_message
-client.connect_async('mqtt.eclipseprojects.io')
-client.loop_start()
-
-# Configuration
-pygame.init()
-fps = 60
-fpsClock = pygame.time.Clock()
-width, height = 1000, 700
-screen = pygame.display.set_mode((width, height))
-
-font = pygame.font.SysFont('Arial', 40)
-
-objects = []
-
+# Button
 class Button():
     def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False):
         self.x = x
@@ -75,6 +46,7 @@ class Button():
         ])
         screen.blit(self.buttonSurface, self.buttonRect)
 
+# TextBot
 class TextBox():
     def __init__(self, x, y, width, height, textText='Text Box', onclickFunction=None, onePress=False):
         self.x = x
@@ -94,6 +66,38 @@ class TextBox():
             self.textRect.height/2 - self.textSurf.get_rect().height/2
         ])
         screen.blit(self.textSurface, self.textRect)
+
+def on_connect(client, userdata, flags, rc):
+    client.subscribe("ece180d/test/rps/2", qos=1)
+
+def on_disconnect(client, userdata, rc):
+    if rc != 0:
+        print('Unexpected Disconnect')
+    else:
+        print('Expected Disconnect')
+
+def on_message(client, userdata, message):
+    msg = message.payload.decode()
+    print('message recieved: ' + str(msg))
+
+#mqtt
+client = mqtt.Client(client_id="player1")
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.on_message = on_message
+client.connect_async('mqtt.eclipseprojects.io')
+client.loop_start()
+
+# Configuration
+pygame.init()
+fps = 60
+fpsClock = pygame.time.Clock()
+width, height = 1000, 700
+screen = pygame.display.set_mode((width, height))
+
+font = pygame.font.SysFont('Arial', 40)
+
+objects = []
 
 game_record = [0,0,0]
 b_width = 400
@@ -120,6 +124,7 @@ def display_results(user_input, msg):
     TextBox((width - 700)/2, 460, 700, b_height, text)
     wl_record = 'W: ' + str(game_record[1]) + ' T: ' + str(game_record[0]) + ' L: ' + str(game_record[2])
     TextBox((width - 700)/2, 570, 700, b_height, wl_record)
+    
 def rockFunc():
     client.publish("ece180d/test/rps/1", 1, qos=1)
 
