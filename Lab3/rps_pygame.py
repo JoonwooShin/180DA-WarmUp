@@ -6,7 +6,7 @@ import random
 pygame.init()
 fps = 60
 fpsClock = pygame.time.Clock()
-width, height = 1000, 600
+width, height = 1000, 700
 screen = pygame.display.set_mode((width, height))
 
 font = pygame.font.SysFont('Arial', 40)
@@ -73,6 +73,12 @@ class TextBox():
             self.textRect.height/2 - self.textSurf.get_rect().height/2
         ])
         screen.blit(self.textSurface, self.textRect)
+
+game_record = [0,0,0]
+b_width = 400
+b_height = 100
+b_init_h = 140
+
 def cpu(user_input):
     cpu = random.randint(1,3)
     choices = ['Rock', 'Paper', 'Scissors']
@@ -81,14 +87,19 @@ def cpu(user_input):
     diff = user_input - cpu
     if diff == 0:
         result = 0
+        game_record[0]+=1
     elif (diff % 3) == 1: 
         result = 1
+        game_record[1]+=1
     else:
         result = 2
+        game_record[2]+=1
+
     game_results = ['Tie Game!','You Win!','CPU Wins!']
     text = 'CPU chose ' + cpu_choice + '. ' + game_results[result]
     TextBox((width - 700)/2, 460, 700, b_height, text)
-
+    wl_record = 'W: ' + str(game_record[1]) + ' T: ' + str(game_record[0]) + ' L: ' + str(game_record[2])
+    TextBox((width - 700)/2, 570, 700, b_height, wl_record)
 def rockFunc():
     res = cpu(1)
 
@@ -98,10 +109,6 @@ def paperFunc():
 def scissorsFunc():
     res = cpu(3)
 
-
-b_width = 400
-b_height = 100
-b_init_h = 140
 Button((width - b_width)/2, b_init_h, b_width, b_height, 'Rock', rockFunc)
 Button((width - b_width)/2, b_init_h + b_height + 10, b_width, b_height, 'Paper', paperFunc)
 Button((width - b_width)/2, b_init_h + 2 * b_height + 20, b_width, b_height, 'Scissors', scissorsFunc  )
